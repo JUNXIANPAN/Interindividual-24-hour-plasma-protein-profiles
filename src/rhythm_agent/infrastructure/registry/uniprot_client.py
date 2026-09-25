@@ -1,0 +1,1 @@
+"""UniProt protein identifier adapter."""

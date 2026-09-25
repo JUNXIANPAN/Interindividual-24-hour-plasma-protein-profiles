@@ -1,0 +1,15 @@
+module_a:
+  proteomics_data: null
+
+module_b:
+  rhyqtl_reference: null
+
+module_c:
+  gwas_catalog: null
+  open_gwas: null
+
+module_d:
+  coloc_inputs: null
+
+module_e:
+  literature_sources: null

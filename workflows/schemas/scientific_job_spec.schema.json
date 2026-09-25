@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScientificJobSpec",
+  "type": "object",
+  "required": ["run_id", "job_id", "workflow_name", "protocol_version", "config_hash", "code_version", "random_seed"],
+  "properties": {
+    "run_id": {"type": "string"},
+    "job_id": {"type": "string"},
+    "workflow_name": {"type": "string"},
+    "protocol_version": {"type": "string"},
+    "config_hash": {"type": "string"},
+    "code_version": {"type": "string"},
+    "random_seed": {"type": "integer"}
+  },
+  "additionalProperties": true
+}

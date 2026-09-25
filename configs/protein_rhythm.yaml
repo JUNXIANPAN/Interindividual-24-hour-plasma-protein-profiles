@@ -1,0 +1,11 @@
+protein_rhythm:
+  input_matrix: "data/report.pg_matrix.tsv"
+  output_dir: "outputs/snakemake_protein_rhythm"
+  screen_bootstrap_top: 10
+  screen_bootstrap_reps: 50
+  validation_bootstrap_reps: 200
+  screen_seed: 20250902
+  validation_seed: 20250903
+  run_id: "protein-rhythm-johonnuson-2025-v1"
+  job_id: "mixed-cosinor-internal-validation"
+  protocol_version: "1.0.0"

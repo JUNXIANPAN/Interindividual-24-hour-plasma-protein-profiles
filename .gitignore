@@ -1,0 +1,35 @@
+# Python
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.snakemake/
+*.pyc
+
+# Data folders
+data/raw/*
+data/interim/*
+data/processed/*
+data/cache/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!data/cache/.gitkeep
+data/report.pg_matrix.tsv
+
+# Local tissue gene lists
+rhyGene/*.txt
+
+# Output folders
+outputs/*
+!outputs/**/.gitkeep
+!outputs/.gitkeep
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db

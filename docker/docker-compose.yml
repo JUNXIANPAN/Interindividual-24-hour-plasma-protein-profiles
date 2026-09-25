@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  rhythm-research-agent:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      PYTHONUNBUFFERED: "1"
+    volumes:
+      - ../src:/app/src
+      - ../data:/app/data
+      - ../outputs:/app/outputs

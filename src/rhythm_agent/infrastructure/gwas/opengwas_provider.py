@@ -1,0 +1,1 @@
+"""OpenGWAS provider adapter."""

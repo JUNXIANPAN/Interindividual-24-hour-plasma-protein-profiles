@@ -1,0 +1,13 @@
+# Scientific thresholds are intentionally left as placeholders.
+# These values should be fixed later in the scientific protocol and validation docs.
+module_a:
+  heterogeneity_fdr: null
+
+module_b:
+  use_cis_only: true
+
+module_c:
+  genome_wide_significance: 5e-8
+
+module_d:
+  coloc_pp4_threshold: null

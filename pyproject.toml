@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rhythm-research-agent"
+version = "0.1.0"
+description = "LangGraph-based biomedical rhythm research agent scaffold"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Rhythm Research Agent" }
+]
+dependencies = [
+    "langgraph",
+    "pydantic",
+    "pydantic-settings",
+    "pandas",
+    "numpy",
+    "scipy",
+    "pyyaml",
+    "httpx",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "mypy",
+]
+workflow = [
+    "snakemake>=8",
+    "statsmodels>=0.14",
+    "matplotlib>=3.8",
+]
+azure = [
+    "azure-identity>=1.17",
+    "langchain>=1.1",
+    "langchain-openai>=0.3.9",
+    "python-dotenv>=1.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true

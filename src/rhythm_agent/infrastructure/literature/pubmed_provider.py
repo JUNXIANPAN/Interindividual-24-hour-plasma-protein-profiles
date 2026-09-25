@@ -1,0 +1,1 @@
+"""PubMed literature provider adapter."""

@@ -1,0 +1,1 @@
+"""Crossref metadata provider adapter."""
