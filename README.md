@@ -1,49 +1,98 @@
-# Rhythm Research Agent
+# Interindividual 24-hour plasma protein profiles
 
-This project is a candidate-centric biomedical evidence agent built around LangGraph and a
-Snakemake scientific-compute boundary.
+Code for screening 24-hour protein profiles and testing whether subjects differ
+in their protein-specific circadian curves.
 
-## Purpose
-Given a Protein + Trait pair, the system builds an auditable evidence matrix from:
+## Analysis overview
 
-- R: deterministic entity resolution
-- A: released protein-rhythm evidence
-- B: optional rhythm-genetics supporting evidence
-- C: GWAS study selection and regional evidence
-- D: conditional colocalization evidence
-- E: agentic literature and mechanism evidence
-- S: evidence synthesis and causal-language safeguards
+The workflow uses LC-MS protein intensities from repeated samples collected over
+the 24-hour cycle. It applies the published sample-level quality-control rule,
+log2-transforms observed intensities without imputation, excludes timestamped
+technical reinjections, and fits mixed-effects cosinor models with plate
+indicators.
 
-## Source architecture
+Two model specifications are provided:
 
-- `contracts/`: stable Pydantic contracts shared across all layers
-- `orchestration/`: top-level LangGraph state, routing, dispatch, and barrier
-- `evidence/`: R, A–E, and S evidence-domain workflows
-- `ports/`: interfaces required by the application core
-- `infrastructure/`: DuckDB, artifact, registry, GWAS, Snakemake, and literature adapters
-- `scientific/`: deterministic statistical kernels independent of LangGraph
+- `first_pass_mixed_cosinor.py`: correlated subject random intercept, cosine,
+	and sine effects.
+- `simplified_mixed_cosinor.py`: independent subject baseline, cosine, and sine
+	variance components. This specification improves model identifiability for
+	the available sample size.
 
-Executable node files carry their stable memo address, for example
-`a02_query_store.py`, `ca03_rank_studies.py`, and `d02_prerequisite_gate.py`.
-See `docs/src_layout.md` for the complete naming rule.
+Candidate validation includes parametric bootstrap likelihood-ratio tests,
+leave-one-subject-out checks, time-origin sensitivity checks, and adjustment for
+a linear time trend.
 
-Snakemake workflows live in `workflows/`, outside the Python package. Node `5` submits
-`ScientificJobSpec` values through `infrastructure/jobs/snakemake_runner.py`; C.b.3 or D.5
-then validates the returned manifest.
+## Repository layout
 
-## Design principles
-- A-D are deterministic evidence workflows without LLM dependency.
-- E is the primary LLM/deep-research workflow and cannot rewrite A-D results.
-- A and C are parallel input-anchored evidence branches; B is optional and D is conditional.
-- LangGraph state contains references and control state, not large scientific datasets.
-- Snakemake owns deterministic file computation behind `ScientificJobSpec` and result manifests.
-- The project uses a src/ layout.
-- Candidate evidence is reported independently; no unsupported composite score is produced.
+```text
+analysis/   Analysis, validation, plotting, and manifest scripts
+configs/    Project configuration files
+docs/       Design notes
+src/        Reusable package components
+tests/      Unit and scientific tests
+workflows/  Snakemake workflow definitions
+```
 
-## Status
-The v0.2 package structure and core cross-layer contracts are scaffolded. Scientific providers,
-workflow nodes, and statistical implementations remain to be implemented and validated.
+## Main scripts
 
-## Requirements
-- Python 3.11
-- Modern Python packaging with src/ layout
+- `analysis/first_pass_mixed_cosinor.py`
+- `analysis/simplified_mixed_cosinor.py`
+- `analysis/validate_simplified_candidates.py`
+- `analysis/plot_candidate_trajectories.py`
+- `analysis/plot_ten_candidate_curves.py`
+- `analysis/build_protein_rhythm_manifest.py`
+
+## Installation
+
+Python 3.11 or newer is required. The statistical workflow uses the optional
+`workflow` dependencies:
+
+```bash
+python -m pip install -e '.[workflow]'
+```
+
+## Running the analysis
+
+The input matrix is a tab-separated file whose first four columns contain
+protein annotations and whose remaining columns contain sample intensities.
+The matrix is not distributed in this repository.
+
+```bash
+python analysis/first_pass_mixed_cosinor.py \
+	--input data/report.pg_matrix.tsv \
+	--output-dir outputs/first_pass_mixed_cosinor \
+	--bootstrap-top 10 \
+	--bootstrap-reps 50
+
+python analysis/simplified_mixed_cosinor.py \
+	--input data/report.pg_matrix.tsv \
+	--output-dir outputs/simplified_mixed_cosinor \
+	--bootstrap-top 10 \
+	--bootstrap-reps 50
+```
+
+Candidate validation uses the simplified-model result table:
+
+```bash
+python analysis/validate_simplified_candidates.py \
+	--matrix data/report.pg_matrix.tsv \
+	--screen-results outputs/simplified_mixed_cosinor/simplified_mixed_cosinor_results.tsv \
+	--output-dir outputs/simplified_candidate_validation \
+	--bootstrap-reps 200
+```
+
+For confirmatory work, set the bootstrap count before running and record the
+seed and software environment with the results.
+
+## Data and reproducibility
+
+Raw protein matrices, tissue gene lists, generated outputs, and local caches are
+excluded from the public repository. To reproduce the analysis, obtain the
+input matrix independently and place it at the path supplied to `--input` or
+`--matrix`. The scripts write QC tables, model results, bootstrap summaries,
+and plots to the requested output directory.
+
+The results are intended for methodological validation and candidate
+prioritization. Carryover, acquisition order, missingness, and model-boundary
+diagnostics should be reviewed before making biological claims.
