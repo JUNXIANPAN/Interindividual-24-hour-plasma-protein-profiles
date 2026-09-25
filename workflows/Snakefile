@@ -1,9 +1,0 @@
-"""Deterministic file-compute DAG behind top-level node 5."""
-
-include: "rules/gwas_regional.smk"
-include: "rules/colocalization.smk"
-include: "rules/protein_rhythm.smk"
-
-rule all:
-    input:
-        config.get("target_manifests", [])

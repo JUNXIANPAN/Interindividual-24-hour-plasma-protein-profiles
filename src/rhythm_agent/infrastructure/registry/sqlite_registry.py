@@ -1,1 +1,0 @@
-"""SQLite entity-resolution cache."""

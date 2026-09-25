@@ -1,1 +1,0 @@
-"""Phenotype ontology adapter."""

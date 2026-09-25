@@ -1,1 +1,0 @@
-"""Deterministic colocalization computation kernels."""

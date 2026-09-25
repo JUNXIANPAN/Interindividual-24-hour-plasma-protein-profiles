@@ -1,1 +1,0 @@
-"""Scientific result-manifest persistence."""
