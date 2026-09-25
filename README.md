@@ -26,12 +26,9 @@ a linear time trend.
 ## Repository layout
 
 ```text
-analysis/   Analysis, validation, plotting, and manifest scripts
-configs/    Project configuration files
-docs/       Design notes
-src/        Reusable package components
-tests/      Unit and scientific tests
-workflows/  Snakemake workflow definitions
+analysis/       Analysis, validation, plotting, and manifest scripts
+README.md       Project and reproducibility notes
+pyproject.toml  Python dependency metadata
 ```
 
 ## Main scripts
@@ -45,11 +42,11 @@ workflows/  Snakemake workflow definitions
 
 ## Installation
 
-Python 3.11 or newer is required. The statistical workflow uses the optional
-`workflow` dependencies:
+Python 3.11 or newer is required. Install the dependencies used by the
+analysis scripts with:
 
 ```bash
-python -m pip install -e '.[workflow]'
+python -m pip install numpy pandas scipy statsmodels matplotlib pyyaml
 ```
 
 ## Running the analysis
