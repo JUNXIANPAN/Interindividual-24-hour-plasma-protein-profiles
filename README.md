@@ -79,6 +79,27 @@ python analysis/validate_simplified_candidates.py \
 	--bootstrap-reps 200
 ```
 
+To inspect optimizer sensitivity for the internally robust candidates, run
+multiple randomized starting values for the null and full models. By default,
+the script selects rows marked `passes_internal_robustness` in the validation
+summary and writes one diagnostic plot per protein plus a table of all fits:
+
+```bash
+python analysis/plot_multistart_fit_diagnostics.py \
+	--matrix data/report.pg_matrix.tsv \
+	--validation-results outputs/simplified_candidate_validation/candidate_validation_summary.tsv \
+	--output-dir outputs/multistart_fit_diagnostics \
+	--starts 20
+```
+
+Use `--genes APOA4 DCD` to restrict the run to named proteins. Each plot shows
+the null/full change in maximum likelihood from that model's best converged
+start (with the same vertical scale for both panels) and the full-model
+subject-level cosine/sine variance estimates from converged fits. Starts are
+numbered with integer labels from 1 to 20. The diagnostic uses L-BFGS with
+randomized starting values; the fit table records convergence and optimizer
+errors for review.
+
 For confirmatory work, set the bootstrap count before running and record the
 seed and software environment with the results.
 
